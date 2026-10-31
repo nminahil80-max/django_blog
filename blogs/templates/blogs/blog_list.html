@@ -1,0 +1,482 @@
+
+{% extends 'accounts/base.html' %}
+
+{% block title %}Explore Ideas | IdeaBloom{% endblock %}
+
+{% block content %}
+
+<style>
+    .home-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* HERO */
+    .hero {
+        position: relative;
+        overflow: hidden;
+        padding: 65px 55px;
+        border-radius: 25px;
+        color: white;
+        background: linear-gradient(120deg, #2936a5 0%, #6650d9 55%, #9b4de0 100%);
+        box-shadow: 0 18px 45px rgba(91, 72, 210, .20);
+    }
+
+    .hero::before,
+    .hero::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255,255,255,.08);
+        pointer-events: none;
+    }
+
+    .hero::before {
+        width: 300px;
+        height: 300px;
+        right: -65px;
+        top: -130px;
+    }
+
+    .hero::after {
+        width: 200px;
+        height: 200px;
+        right: 160px;
+        bottom: -130px;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 650px;
+    }
+
+    .hero-tag {
+        display: inline-block;
+        padding: 7px 14px;
+        border: 1px solid rgba(255,255,255,.3);
+        border-radius: 30px;
+        background: rgba(255,255,255,.12);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+    }
+
+    .hero h1 {
+        font-size: clamp(34px, 5vw, 51px);
+        line-height: 1.15;
+        letter-spacing: -1.8px;
+        margin-bottom: 16px;
+    }
+
+    .hero p {
+        color: #e5e7ff;
+        font-size: 15px;
+        max-width: 550px;
+        line-height: 1.9;
+    }
+
+    .hero-highlight {
+        color: #d9c7ff;
+    }
+
+    /* SECTION HEADING */
+    .section-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: end;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .section-heading h2 {
+        font-size: 25px;
+        font-weight: 800;
+        letter-spacing: -.7px;
+        color: var(--text);
+    }
+
+    .section-heading p {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 4px;
+    }
+
+    /* FILTER */
+    .filter-card {
+        padding: 19px;
+        border-radius: 17px;
+    }
+
+    .filter-form {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) 220px auto;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .filter-form input,
+    .filter-form select {
+        margin: 0;
+        min-height: 47px;
+    }
+
+    .filter-form .btn {
+        min-height: 47px;
+        white-space: nowrap;
+    }
+
+    /* BLOG GRID */
+    .blog-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 24px;
+    }
+
+    .blog-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+
+    .blog-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 18px 38px rgba(75, 68, 160, .14);
+    }
+
+    .image-wrapper {
+        height: 205px;
+        overflow: hidden;
+        position: relative;
+        background: var(--surface-secondary);
+    }
+
+    .blog-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        transition: transform .4s ease;
+    }
+
+    .blog-card:hover .blog-image {
+        transform: scale(1.05);
+    }
+
+    .image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        place-items: center;
+        font-size: 45px;
+        color: white;
+        background: linear-gradient(135deg, #4e5ee5, #9b54dc);
+    }
+
+    .blog-info {
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+
+    .category-label {
+        display: inline-block;
+        width: fit-content;
+        background: rgba(112, 91, 226, .12);
+        color: var(--primary);
+        padding: 6px 12px;
+        border-radius: 30px;
+        font-size: 10px;
+        font-weight: 800;
+        letter-spacing: .4px;
+        text-transform: uppercase;
+    }
+
+    .blog-info h2 {
+        font-size: 18px;
+        line-height: 1.5;
+        margin: 14px 0 9px;
+        letter-spacing: -.3px;
+    }
+
+    .blog-info h2 a {
+        color: var(--text);
+        text-decoration: none;
+        transition: color .2s;
+    }
+
+    .blog-info h2 a:hover {
+        color: var(--primary);
+    }
+
+    .blog-meta {
+        color: var(--muted);
+        font-size: 11px;
+        margin-bottom: 13px;
+    }
+
+    .blog-description {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.8;
+        margin-bottom: 20px;
+        flex: 1;
+    }
+
+    .read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        width: fit-content;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 800;
+        font-size: 12px;
+        transition: gap .2s;
+    }
+
+    .read-more:hover {
+        gap: 12px;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 65px 25px;
+        border-radius: 18px;
+    }
+
+    .empty-icon {
+        font-size: 45px;
+        margin-bottom: 15px;
+    }
+
+    .empty-state h2 {
+        margin-bottom: 8px;
+        color: var(--text);
+    }
+
+    /* PAGINATION */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        margin: 10px 0 20px;
+        flex-wrap: wrap;
+    }
+
+    .pagination a {
+        text-decoration: none;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        padding: 10px 19px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all .2s;
+    }
+
+    .pagination a:hover {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: white;
+    }
+
+    .pagination span {
+        font-size: 12px;
+    }
+
+    @media(max-width: 950px) {
+        .blog-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media(max-width: 650px) {
+        .hero {
+            padding: 38px 25px;
+            border-radius: 19px;
+        }
+
+        .hero h1 {
+            font-size: 34px;
+        }
+
+        .filter-form,
+        .blog-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .section-heading h2 {
+            font-size: 22px;
+        }
+
+        .image-wrapper {
+            height: 220px;
+        }
+    }
+</style>
+
+<div class="home-wrapper">
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <span class="hero-tag">✦ Welcome to IdeaBloom</span>
+
+            <h1>
+                Every Great Idea<br>
+                Starts With a <span class="hero-highlight">Story.</span>
+            </h1>
+
+            <p>
+                Discover fresh perspectives, explore inspiring stories,
+                and share ideas that make a difference. Your next favourite
+                read is waiting for you.
+            </p>
+        </div>
+    </section>
+
+    <!-- SEARCH AND FILTER -->
+    <section class="card filter-card">
+        <form method="GET" class="filter-form">
+
+            <input
+                type="text"
+                name="search"
+                placeholder="Search stories, topics or ideas..."
+                value="{{ search_query }}"
+            >
+
+            <select name="category">
+                <option value="">All Categories</option>
+
+                {% for category in categories %}
+                    <option value="{{ category.slug }}"
+                        {% if category_slug == category.slug %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn">
+                Search Articles →
+            </button>
+
+        </form>
+    </section>
+
+    <!-- BLOG SECTION -->
+    <section>
+        <div class="section-heading">
+            <div>
+                <h2>Explore Latest Stories ✨</h2>
+                <p>Ideas, knowledge and inspiration from our writers.</p>
+            </div>
+        </div>
+
+        <div class="blog-grid" style="margin-top: 22px;">
+
+            {% for post in page_obj %}
+
+                <article class="blog-card">
+
+                    <div class="image-wrapper">
+                        {% if post.featured_image %}
+                            <img
+                                src="{{ post.featured_image.url }}"
+                                alt="{{ post.title }}"
+                                class="blog-image"
+                            >
+                        {% else %}
+                            <div class="image-placeholder">✦</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="blog-info">
+
+                        <span class="category-label">
+                            {{ post.category.name }}
+                        </span>
+
+                        <h2>
+                            <a href="{% url 'blog_detail' post.slug %}">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+
+                        <p class="blog-meta">
+                            By {{ post.author.username }}
+                            &nbsp;·&nbsp;
+                            {{ post.created_at|date:"d M Y" }}
+                        </p>
+
+                        <p class="blog-description">
+                            {{ post.content|truncatewords:22 }}
+                        </p>
+
+                        <a
+                            href="{% url 'blog_detail' post.slug %}"
+                            class="read-more"
+                        >
+                            Read Full Article <span>→</span>
+                        </a>
+
+                    </div>
+                </article>
+
+            {% empty %}
+
+                <div class="card empty-state">
+                    <div class="empty-icon">🔎</div>
+                    <h2>No Stories Found</h2>
+                    <p class="muted">
+                        We couldn't find any articles matching your search.
+                        Try another keyword or category.
+                    </p>
+                </div>
+
+            {% endfor %}
+
+        </div>
+    </section>
+
+    <!-- PAGINATION -->
+    {% if page_obj.paginator.num_pages > 1 %}
+        <div class="pagination">
+
+            {% if page_obj.has_previous %}
+                <a href="?search={{ search_query|urlencode }}&category={{ category_slug|urlencode }}&page={{ page_obj.previous_page_number }}">
+                    ← Previous
+                </a>
+            {% endif %}
+
+            <span class="muted">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?search={{ search_query|urlencode }}&category={{ category_slug|urlencode }}&page={{ page_obj.next_page_number }}">
+                    Next →
+                </a>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

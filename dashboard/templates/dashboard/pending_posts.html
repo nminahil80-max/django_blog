@@ -1,0 +1,355 @@
+
+{% extends 'accounts/base.html' %}
+
+{% block title %}Review Articles | IdeaBloom{% endblock %}
+
+{% block content %}
+
+<style>
+    .moderation-header {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(120deg, #172554, #2563eb, #7c3aed);
+        color: white;
+        padding: 35px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 22px rgba(37, 99, 235, 0.18);
+    }
+
+    .moderation-header::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border: 30px solid rgba(255,255,255,0.08);
+        border-radius: 50%;
+        right: -45px;
+        top: -75px;
+    }
+
+    .moderation-header h1 {
+        font-size: 30px;
+        font-weight: 800;
+        margin-bottom: 9px;
+    }
+
+    .moderation-header p {
+        color: #dbeafe;
+        font-size: 14px;
+        margin-top: 8px;
+    }
+
+    .section-title {
+        color: var(--text);
+        font-size: 22px;
+        font-weight: 750;
+        margin-bottom: 20px;
+    }
+
+    .review-card {
+        margin-bottom: 22px;
+        padding: 27px;
+        border: 1px solid var(--border);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .review-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+
+    .review-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .review-title {
+        color: var(--text);
+        font-size: 21px;
+        font-weight: 750;
+        overflow-wrap: anywhere;
+    }
+
+    .pending-label {
+        display: inline-block;
+        background: #fff4d6;
+        color: #946200;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 750;
+        white-space: nowrap;
+    }
+
+    .review-meta {
+        color: var(--muted);
+        font-size: 13px;
+        margin-top: 9px;
+    }
+
+    .review-image {
+        display: block;
+        width: 100%;
+        max-height: 280px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin: 18px 0;
+    }
+
+    .post-description {
+        color: var(--text);
+        opacity: 0.85;
+        margin: 18px 0;
+        line-height: 1.8;
+        font-size: 14px;
+        overflow-wrap: anywhere;
+    }
+
+    .review-divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 22px 0;
+    }
+
+    .review-actions {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .approve-form {
+        flex-shrink: 0;
+    }
+
+    .approve-btn {
+        background: #15803d;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 12px 19px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .approve-btn:hover {
+        background: #166534;
+        transform: translateY(-2px);
+    }
+
+    .reject-form {
+        flex: 1;
+        min-width: 240px;
+    }
+
+    .reject-form label {
+        display: block;
+        color: var(--text);
+        font-size: 13px;
+        font-weight: 700;
+        margin-bottom: 9px;
+    }
+
+    .reject-form textarea {
+        min-height: 85px;
+        resize: vertical;
+        margin-bottom: 10px;
+    }
+
+    .reject-form textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+    }
+
+    .reject-btn {
+        background: #dc2626;
+        color: white;
+        border: none;
+        border-radius: 9px;
+        padding: 11px 18px;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.2s;
+    }
+
+    .reject-btn:hover {
+        background: #b91c1c;
+        transform: translateY(-2px);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 55px 20px;
+    }
+
+    .empty-icon {
+        font-size: 42px;
+        margin-bottom: 15px;
+    }
+
+    .empty-state h2 {
+        color: var(--text);
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .empty-state p {
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    @media (max-width: 600px) {
+        .moderation-header {
+            padding: 25px;
+        }
+
+        .moderation-header h1 {
+            font-size: 25px;
+        }
+
+        .review-card {
+            padding: 19px;
+        }
+
+        .review-title {
+            font-size: 18px;
+        }
+
+        .review-actions {
+            flex-direction: column;
+        }
+
+        .approve-form,
+        .approve-btn {
+            width: 100%;
+        }
+
+        .reject-form {
+            width: 100%;
+            min-width: 0;
+        }
+    }
+</style>
+
+<!-- Moderation Header -->
+<div class="moderation-header">
+
+    <h1>Article Moderation</h1>
+
+    <p>
+        Review submitted articles, provide feedback,
+        and manage their publication.
+    </p>
+
+</div>
+
+<!-- Pending Submissions -->
+<h2 class="section-title">
+    Pending Submissions
+</h2>
+
+{% for post in posts %}
+
+    <div class="card review-card">
+
+        <div class="review-top">
+
+            <div>
+                <h2 class="review-title">
+                    {{ post.title }}
+                </h2>
+
+                <p class="review-meta">
+                    Author: <strong>{{ post.author.username }}</strong>
+                    · Category: {{ post.category.name }}
+                </p>
+            </div>
+
+            <span class="pending-label">
+                ● Pending Review
+            </span>
+
+        </div>
+
+        {% if post.featured_image %}
+
+            <img
+                src="{{ post.featured_image.url }}"
+                alt="{{ post.title }}"
+                class="review-image"
+            >
+
+        {% endif %}
+
+        <p class="post-description">
+            {{ post.content|truncatewords:50 }}
+        </p>
+
+        <hr class="review-divider">
+
+        <!-- Review Actions -->
+        <div class="review-actions">
+
+            <form method="POST"
+                  action="{% url 'approve_post' post.id %}"
+                  class="approve-form">
+
+                {% csrf_token %}
+
+                <button type="submit" class="approve-btn">
+                    ✓ Approve Article
+                </button>
+
+            </form>
+
+            <form method="POST"
+                  action="{% url 'reject_post' post.id %}"
+                  class="reject-form">
+
+                {% csrf_token %}
+
+                <label>
+                    Reason for rejection
+                </label>
+
+                <textarea
+                    name="rejection_reason"
+                    placeholder="Explain why this article is rejected..."
+                    required
+                ></textarea>
+
+                <button type="submit" class="reject-btn">
+                    ✕ Reject Article
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+{% empty %}
+
+    <div class="card empty-state">
+
+        <div class="empty-icon">✦</div>
+
+        <h2>All Caught Up!</h2>
+
+        <p>
+            There are currently no articles waiting for review.
+        </p>
+
+    </div>
+
+{% endfor %}
+
+{% endblock %}

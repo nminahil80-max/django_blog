@@ -3,8 +3,22 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
 class RegisterForm(UserCreationForm):
+
+    ROLE_CHOICES = [
+        ('User', 'User'),
+        ('Author', 'Author'),
+    ]
+
+    role = forms.ChoiceField(choices=ROLE_CHOICES)
+
     email = forms.EmailField(required=True)
-    
-    class Mate:
+
+    class Meta:
         model = User
-        field = ('username','email','password1','password2')
+        fields = (
+            'username',
+            'email',
+            'role',
+            'password1',
+            'password2'
+        )

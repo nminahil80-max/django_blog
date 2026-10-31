@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}IdeaBloom | Ideas into Stories{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        (function () {
+            const savedTheme = localStorage.getItem('ideabloom-theme');
+            document.documentElement.dataset.theme = savedTheme || 'light';
+        })();
+    </script>
+
+    <style>
+        :root {
+            --primary: #5965e9;
+            --primary-dark: #4652d5;
+            --purple: #9146e8;
+            --bg: #f6f7fc;
+            --surface: #ffffff;
+            --surface-secondary: #f0f1fa;
+            --text: #17182b;
+            --muted: #777b95;
+            --border: #e7e8f2;
+            --navbar: rgba(255,255,255,0.92);
+            --shadow: 0 12px 35px rgba(35, 37, 90, 0.07);
+        }
+
+        [data-theme="dark"] {
+            --bg: #10111b;
+            --surface: #191a29;
+            --surface-secondary: #222337;
+            --text: #f2f2ff;
+            --muted: #a3a5bd;
+            --border: #303147;
+            --navbar: rgba(18,19,31,0.94);
+            --shadow: 0 12px 35px rgba(0,0,0,0.2);
+            --primary: #8991ff;
+            --primary-dark: #727bf0;
+            --purple: #b17aff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.25s, color 0.25s;
+        }
+
+        a {
+            color: var(--primary);
+        }
+
+        .navbar {
+            background: var(--navbar);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -1.2px;
+        }
+
+        .logo-icon {
+            width: 39px;
+            height: 39px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            color: white;
+            background: linear-gradient(135deg, #5965e9, #a34de8);
+            font-size: 21px;
+        }
+
+        .logo span {
+            background: linear-gradient(100deg, #5965e9, #a34de8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .nav-links form {
+            margin: 0;
+        }
+
+        .theme-toggle {
+            border: 1px solid var(--border);
+            background: var(--surface-secondary);
+            color: var(--text);
+            width: 39px;
+            height: 39px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .container {
+            width: 86%;
+            max-width: 1200px;
+            margin: 42px auto;
+            flex: 1;
+            min-height: 65vh;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 10px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: var(--shadow);
+            transition: background 0.25s, border-color 0.25s;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            background: linear-gradient(110deg, #5965e9, #9146e8);
+            color: white !important;
+            padding: 11px 21px;
+            border: none;
+            border-radius: 10px;
+            text-decoration: none;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 7px 18px rgba(100, 80, 220, 0.25);
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin: 7px 0 16px;
+            font-family: inherit;
+            font-size: 14px;
+            background: var(--surface);
+            color: var(--text);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(89, 101, 233, 0.13);
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .footer {
+            background: #121321;
+            color: #a7a8c0;
+            text-align: center;
+            padding: 27px 15px;
+            font-size: 13px;
+            margin-top: auto;
+        }
+
+        .footer span {
+            color: #a58aff;
+            font-weight: 700;
+        }
+
+        @media (max-width: 700px) {
+            .navbar {
+                padding: 14px 5%;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                width: 100%;
+                gap: 13px;
+                flex-wrap: wrap;
+            }
+
+            .container {
+                width: 92%;
+                margin: 28px auto;
+            }
+
+            .page-title {
+                font-size: 26px;
+            }
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <a href="{% url 'blog_list' %}" class="logo">
+            <span class="logo-icon">✦</span>
+            Idea<span>Bloom.</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="{% url 'blog_list' %}">Home</a>
+
+            {% if user.is_authenticated %}
+
+                {% if user.is_superuser or user.is_staff %}
+                    <a href="{% url 'pending_posts' %}">Admin Dashboard</a>
+                {% else %}
+                    {% for group in user.groups.all %}
+                        {% if group.name == 'Author' %}
+                            <a href="{% url 'author_dashboard' %}">Author Dashboard</a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+                <form method="POST" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn">Logout</button>
+                </form>
+
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'register' %}" class="btn">Get Started →</a>
+            {% endif %}
+
+            <button
+                type="button"
+                class="theme-toggle"
+                id="themeToggle"
+                aria-label="Toggle light and dark theme"
+                title="Change theme"
+            >🌙</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="footer">
+        © 2026 <span>IdeaBloom</span>. Grow your ideas. Share your stories.
+    </footer>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+
+        function updateThemeButton() {
+            themeToggle.textContent =
+                document.documentElement.dataset.theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        updateThemeButton();
+
+        themeToggle.addEventListener('click', function () {
+            const currentTheme = document.documentElement.dataset.theme;
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            document.documentElement.dataset.theme = newTheme;
+            localStorage.setItem('ideabloom-theme', newTheme);
+
+            updateThemeButton();
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

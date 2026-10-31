@@ -57,4 +57,10 @@ urlpatterns = [
         views.author_dashboard,
         name='author_dashboard'
     ),
+
+    path(
+        'dashboard/',
+        views.dashboard_redirect,
+        name='dashboard_redirect'
+    ),
 ]
