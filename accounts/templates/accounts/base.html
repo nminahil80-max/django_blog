@@ -288,6 +288,8 @@
                     {% endfor %}
                 {% endif %}
 
+                <a href="{% url 'contact_us' %}">Contact</a>
+
                 <form method="POST" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit" class="btn">Logout</button>
@@ -295,6 +297,7 @@
 
             {% else %}
                 <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'contact_us' %}">Contact</a>
                 <a href="{% url 'register' %}" class="btn">Get Started →</a>
             {% endif %}
 

@@ -1,0 +1,234 @@
+
+{% extends 'accounts/base.html' %}
+
+{% block title %}Contact Messages | IdeaBloom{% endblock %}
+
+{% block content %}
+
+<style>
+    .messages-page {
+        max-width: 1150px;
+        margin: 0 auto;
+        padding: 45px 20px 70px;
+    }
+
+    .messages-header {
+        background: linear-gradient(135deg, #172554, #4338ca);
+        color: white;
+        padding: 38px;
+        border-radius: 18px;
+        margin-bottom: 35px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .messages-header h1 {
+        font-size: 30px;
+        margin: 0 0 10px;
+    }
+
+    .messages-header p {
+        margin: 0;
+        color: #dbeafe;
+        font-size: 15px;
+    }
+
+    .messages-count {
+        background: rgba(255,255,255,0.15);
+        border: 1px solid rgba(255,255,255,0.25);
+        padding: 14px 22px;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .messages-count strong {
+        display: block;
+        font-size: 27px;
+    }
+
+    .messages-count span {
+        font-size: 12px;
+        color: #dbeafe;
+    }
+
+    .messages-section-title {
+        font-size: 21px;
+        color: #172554;
+        margin-bottom: 20px;
+    }
+
+    .message-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 18px;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, 0.04);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .message-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
+    }
+
+    .message-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 15px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .message-subject {
+        color: #172554;
+        font-size: 19px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .message-date {
+        background: #eef2ff;
+        color: #4338ca;
+        padding: 7px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+    }
+
+    .sender-details {
+        display: flex;
+        gap: 25px;
+        flex-wrap: wrap;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #eef0f4;
+        margin-bottom: 18px;
+    }
+
+    .sender-details p {
+        margin: 0;
+        color: #475569;
+        font-size: 14px;
+    }
+
+    .sender-details strong {
+        color: #172554;
+    }
+
+    .message-label {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.7px;
+        margin-bottom: 9px;
+    }
+
+    .message-text {
+        color: #334155;
+        line-height: 1.8;
+        font-size: 15px;
+        overflow-wrap: anywhere;
+    }
+
+    .empty-messages {
+        background: #ffffff;
+        border: 1px dashed #cbd5e1;
+        border-radius: 16px;
+        text-align: center;
+        padding: 65px 20px;
+    }
+
+    .empty-messages .empty-icon {
+        font-size: 42px;
+        margin-bottom: 15px;
+    }
+
+    .empty-messages h3 {
+        color: #172554;
+        margin-bottom: 8px;
+    }
+
+    .empty-messages p {
+        color: #64748b;
+        margin: 0;
+    }
+
+    @media (max-width: 600px) {
+        .messages-header {
+            padding: 25px;
+        }
+
+        .messages-header h1 {
+            font-size: 24px;
+        }
+
+        .message-card {
+            padding: 19px;
+        }
+
+        .sender-details {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+
+<div class="messages-page">
+
+    <div class="messages-header">
+        <div>
+            <h1>Contact Messages</h1>
+            <p>View and manage messages received from website visitors.</p>
+        </div>
+
+        <div class="messages-count">
+            <strong>{{ contact_messages|length }}</strong>
+            <span>Total Messages</span>
+        </div>
+    </div>
+
+    <h2 class="messages-section-title">Visitor Inquiries</h2>
+
+    {% for contact in contact_messages %}
+
+        <div class="message-card">
+
+            <div class="message-top">
+                <h3 class="message-subject">{{ contact.subject }}</h3>
+
+                <span class="message-date">
+                    {{ contact.created_at|date:"d M Y, h:i A" }}
+                </span>
+            </div>
+
+            <div class="sender-details">
+                <p><strong>From:</strong> {{ contact.name }}</p>
+                <p><strong>Email:</strong> {{ contact.email }}</p>
+            </div>
+
+            <div>
+                <p class="message-label">Message</p>
+                <div class="message-text">
+                    {{ contact.message|linebreaksbr }}
+                </div>
+            </div>
+
+        </div>
+
+    {% empty %}
+
+        <div class="empty-messages">
+            <div class="empty-icon">✉️</div>
+            <h3>No Messages Yet</h3>
+            <p>When visitors submit the Contact Us form, their messages will appear here.</p>
+        </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

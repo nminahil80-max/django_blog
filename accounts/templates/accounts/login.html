@@ -1,4 +1,3 @@
-
 {% extends 'accounts/base.html' %}
 
 {% block title %}Login | IdeaBloom{% endblock %}
@@ -77,6 +76,29 @@
         outline: none;
         border-color: var(--primary);
         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+    }
+
+    /* Password show/hide */
+    .password-wrapper {
+        position: relative;
+    }
+
+    .password-wrapper input {
+        padding-right: 48px;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 18px;
+        color: var(--muted);
+        padding: 5px;
+        width: auto;
     }
 
     .login-card .helptext {
@@ -169,7 +191,30 @@
         <form method="POST">
             {% csrf_token %}
 
-            {{ form.as_p }}
+            {% for field in form %}
+                <p>
+                    <label for="{{ field.id_for_label }}">
+                        {{ field.label }}
+                    </label>
+
+                    {% if field.name == 'password' %}
+                        <div class="password-wrapper">
+                            {{ field }}
+                            <button
+                                type="button"
+                                class="toggle-password"
+                                onclick="togglePassword('{{ field.id_for_label }}', this)"
+                                aria-label="Show password">
+                                👁
+                            </button>
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+
+                    {{ field.errors }}
+                </p>
+            {% endfor %}
 
             <button type="submit" class="login-submit">
                 Login to Account →
@@ -194,5 +239,21 @@
     </div>
 
 </div>
+
+<script>
+    function togglePassword(inputId, button) {
+        const passwordInput = document.getElementById(inputId);
+
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            button.textContent = "🙈";
+            button.setAttribute("aria-label", "Hide password");
+        } else {
+            passwordInput.type = "password";
+            button.textContent = "👁";
+            button.setAttribute("aria-label", "Show password");
+        }
+    }
+</script>
 
 {% endblock %}

@@ -3,10 +3,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from blogs import views as blog_views
-
+from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
-
+    path('contact/', include('contact.urls')),
     # Homepage
     path('', blog_views.blog_list, name='home'),
 
@@ -21,3 +21,4 @@ if settings.DEBUG:
         settings.MEDIA_URL,
         document_root=settings.MEDIA_ROOT
     )
+    

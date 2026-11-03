@@ -13,7 +13,7 @@
         color: white;
         padding: 35px;
         border-radius: 18px;
-        margin-bottom: 30px;
+        margin-bottom: 20px;
         box-shadow: 0 8px 22px rgba(37, 99, 235, 0.18);
     }
 
@@ -38,6 +38,25 @@
         color: #dbeafe;
         font-size: 14px;
         margin-top: 8px;
+    }
+
+    .contact-link {
+        display: inline-block;
+        background: #2563eb;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 9px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        margin-bottom: 30px;
+        transition: 0.2s;
+    }
+
+    .contact-link:hover {
+        background: #1d4ed8;
+        color: white;
+        transform: translateY(-2px);
     }
 
     .section-title {
@@ -251,6 +270,11 @@
 
 </div>
 
+<!-- Contact Messages Button -->
+<a href="{% url 'contact_messages' %}" class="contact-link">
+    ✉ View Contact Messages
+</a>
+
 <!-- Pending Submissions -->
 <h2 class="section-title">
     Pending Submissions
@@ -295,7 +319,6 @@
 
         <hr class="review-divider">
 
-        <!-- Review Actions -->
         <div class="review-actions">
 
             <form method="POST"
@@ -316,9 +339,7 @@
 
                 {% csrf_token %}
 
-                <label>
-                    Reason for rejection
-                </label>
+                <label>Reason for rejection</label>
 
                 <textarea
                     name="rejection_reason"

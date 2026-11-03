@@ -1,19 +1,22 @@
-from django.shortcuts import render, redirect
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, user_passes_test
-from .forms import BlogPostForm
-from django.shortcuts import get_object_or_404
 from django.http import HttpResponse
-from .models import BlogPost
 from django.utils import timezone
 from django.core.paginator import Paginator
 from django.db.models import Q
-from .models import Category
 from django.views.decorators.http import require_POST
+
+from .forms import BlogPostForm
+from .models import BlogPost, Category
+from contact.models import ContactMessage
+
 
 def is_author(user):
     return user.groups.filter(name='Author').exists()
 
 
+# Create Blog Post
 @login_required
 @user_passes_test(is_author)
 def create_post(request):
@@ -30,6 +33,9 @@ def create_post(request):
         form = BlogPostForm()
 
     return render(request, 'blogs/post_form.html', {'form': form})
+
+
+# Edit Blog Post
 @login_required
 @user_passes_test(is_author)
 def edit_post(request, post_id):
@@ -53,6 +59,9 @@ def edit_post(request, post_id):
         form = BlogPostForm(instance=post)
 
     return render(request, 'blogs/post_form.html', {'form': form})
+
+
+# Delete Blog Post
 @login_required
 @user_passes_test(is_author)
 def delete_post(request, post_id):
@@ -72,6 +81,8 @@ def delete_post(request, post_id):
 
     return HttpResponse("Confirm deletion")
 
+
+# Submit Blog Post for Review
 @login_required
 @user_passes_test(is_author)
 @require_POST
@@ -93,6 +104,29 @@ def submit_post(request, post_id):
 
     return redirect('author_dashboard')
 
+
+# Admin Dashboard: Pending Posts + Contact Messages
+@login_required
+@user_passes_test(lambda user: user.is_staff)
+def pending_posts(request):
+
+    posts = BlogPost.objects.filter(
+        status=BlogPost.Status.PENDING
+    ).select_related('author', 'category')
+
+    contact_messages = ContactMessage.objects.all().order_by('-created_at')
+
+    return render(
+        request,
+        'dashboard/pending_posts.html',
+        {
+            'posts': posts,
+            'contact_messages': contact_messages
+        }
+    )
+
+
+# Public Blog List
 def blog_list(request):
     posts = BlogPost.objects.filter(
         status=BlogPost.Status.PUBLISHED
@@ -121,7 +155,9 @@ def blog_list(request):
         'search_query': search_query,
         'category_slug': category_slug,
     })
-    
+
+
+# Blog Detail
 def blog_detail(request, slug):
     post = get_object_or_404(
         BlogPost.objects.select_related('author', 'category'),

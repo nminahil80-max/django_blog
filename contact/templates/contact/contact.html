@@ -1,0 +1,319 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Contact Us | IdeaBloom{% endblock %}
+
+{% block extra_css %}
+<style>
+    .contact-page {
+        max-width: 1100px;
+        margin: 25px auto;
+    }
+
+    .contact-heading {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .contact-heading h1 {
+        color: var(--text);
+        font-size: 36px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .contact-heading p {
+        color: var(--muted);
+        font-size: 15px;
+    }
+
+    .contact-layout {
+        display: grid;
+        grid-template-columns: 0.85fr 1.4fr;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+
+    .contact-info {
+        background: linear-gradient(145deg, #5965e9, #9146e8);
+        color: white;
+        padding: 42px 32px;
+    }
+
+    .contact-info h2 {
+        font-size: 25px;
+        margin-bottom: 15px;
+        color: white;
+    }
+
+    .contact-info > p {
+        color: #f0edff;
+        line-height: 1.8;
+        margin-bottom: 35px;
+        font-size: 14px;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 28px;
+    }
+
+    /* Same icon box size for every item */
+    .info-icon {
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        display: grid;
+        place-items: center;
+        background: rgba(255,255,255,0.16);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 18px;
+        font-size: 25px;
+        box-sizing: border-box;
+    }
+
+    .info-item strong {
+        display: block;
+        color: white;
+        margin-bottom: 7px;
+        font-size: 16px;
+    }
+
+    .info-item span,
+    .info-item a {
+        color: #f0edff;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .info-item a {
+        text-decoration: none;
+    }
+
+    .info-item a:hover {
+        text-decoration: underline;
+    }
+
+    .contact-form-area {
+        padding: 42px;
+        background: var(--surface);
+    }
+
+    .contact-form-area h2 {
+        color: var(--text);
+        font-size: 24px;
+        margin-bottom: 7px;
+    }
+
+    .form-subtitle {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .contact-field {
+        margin-bottom: 17px;
+    }
+
+    .contact-field label {
+        display: block;
+        color: var(--text);
+        margin-bottom: 7px;
+    }
+
+    .contact-field input,
+    .contact-field textarea {
+        margin: 0;
+        background: var(--surface-secondary);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+
+    .contact-field input::placeholder,
+    .contact-field textarea::placeholder {
+        color: var(--muted);
+        opacity: 0.8;
+    }
+
+    .contact-field textarea {
+        min-height: 125px;
+        resize: vertical;
+    }
+
+    .field-errors {
+        color: #ef4444;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .contact-submit {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(110deg, var(--primary), var(--purple));
+        color: white;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .contact-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 7px 18px rgba(100, 80, 220, 0.25);
+    }
+
+    .contact-success {
+        padding: 13px 16px;
+        background: var(--surface-secondary);
+        color: var(--primary);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 750px) {
+        .contact-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-info,
+        .contact-form-area {
+            padding: 28px 22px;
+        }
+
+        .contact-heading h1 {
+            font-size: 29px;
+        }
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+
+<div class="contact-page">
+
+    <div class="contact-heading">
+        <h1>Let's Connect</h1>
+        <p>Have a question, idea, or suggestion? We'd love to hear from you.</p>
+    </div>
+
+    <div class="contact-layout">
+
+        <div class="contact-info">
+
+            <h2>Get in Touch</h2>
+
+            <p>
+                We're always happy to hear from our readers.
+                Send us your questions or suggestions, and our team
+                will get back to you.
+            </p>
+
+            <!-- Email Inquiry -->
+            <div class="info-item">
+                <div class="info-icon">✉</div>
+                <div>
+                    <strong>Send an Inquiry</strong>
+                    <a href="mailto:nminahil80@gmail.com">
+                        Email us directly
+                    </a>
+                </div>
+            </div>
+
+            <!-- Share Ideas -->
+            <div class="info-item">
+                <div class="info-icon">💬</div>
+                <div>
+                    <strong>Share Your Ideas</strong>
+                    <span>Your feedback helps us improve.</span>
+                </div>
+            </div>
+
+            <!-- Community -->
+            <div class="info-item">
+                <div class="info-icon">🌐</div>
+                <div>
+                    <strong>Join Our Community</strong>
+                    <span>Be part of the IdeaBloom journey.</span>
+                </div>
+            </div>
+
+            <!-- Contact Number -->
+            <div class="info-item">
+                <div class="info-icon">📞</div>
+                <div>
+                    <strong>Call Us</strong>
+                    <a href="tel:+923001234567">
+                        +92 300 1234567
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="contact-form-area">
+
+            <h2>Send Us a Message</h2>
+
+            <p class="form-subtitle">
+                Fill in the details below to get in touch with us.
+            </p>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="contact-success">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="contact-field">
+                    <label for="{{ form.name.id_for_label }}">Your Name</label>
+                    {{ form.name }}
+                    <div class="field-errors">{{ form.name.errors }}</div>
+                </div>
+
+                <div class="contact-field">
+                    <label for="{{ form.email.id_for_label }}">Email Address</label>
+                    {{ form.email }}
+                    <div class="field-errors">{{ form.email.errors }}</div>
+                </div>
+
+                <div class="contact-field">
+                    <label for="{{ form.subject.id_for_label }}">Subject</label>
+                    {{ form.subject }}
+                    <div class="field-errors">{{ form.subject.errors }}</div>
+                </div>
+
+                <div class="contact-field">
+                    <label for="{{ form.message.id_for_label }}">Your Message</label>
+                    {{ form.message }}
+                    <div class="field-errors">{{ form.message.errors }}</div>
+                </div>
+
+                <button type="submit" class="contact-submit">
+                    Send Message →
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
